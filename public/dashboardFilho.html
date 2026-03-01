@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard Filho</title>
+</head>
+<body>
+    <h1>Minhas Tarefas</h1>
+
+    <button onclick="logout()">Sair</button>
+
+    <ul id="listaTarefas"></ul>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            const filhoId = Number(localStorage.getItem('filhoId'));
+
+            if (!filhoId) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            async function carregarTarefas() {
+                const res = await fetch(`/api/tarefas/filho/${filhoId}`);
+
+                if (!res.ok) {
+                    alert("Erro ao carregar tarefas");
+                    return;
+                }
+
+                const tarefas = await res.json();
+
+                const lista = document.getElementById('listaTarefas');
+                lista.innerHTML = '';
+
+                tarefas.forEach(tarefa => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <strong>${tarefa.titulo}</strong> - ${tarefa.descricao}
+                        <button onclick="concluir(${tarefa.id})">Concluir</button>
+                    `;
+                    lista.appendChild(li);
+                });
+            }
+
+            window.concluir = async function(tarefaId) {
+                const res = await fetch('/api/tarefas/concluir', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        tarefaId: tarefaId,
+                        filhoId: filhoId
+                    })
+                });
+
+                if (!res.ok) {
+                    alert("Erro ao concluir tarefa");
+                    return;
+                }
+
+                alert('Tarefa concluída!');
+                carregarTarefas();
+            }
+
+            window.logout = function() {
+                localStorage.clear();
+                window.location.href = 'login.html';
+            }
+
+            carregarTarefas();
+
+        });
+    </script>
+</body>
+</html>

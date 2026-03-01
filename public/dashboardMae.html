@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard Mãe</title>
+</head>
+<body>
+
+<h1>Painel da Mãe</h1>
+
+<button onclick="logout()">Sair</button>
+
+<hr>
+
+<h2>Cadastrar Filho</h2>
+<form id="formFilho">
+    <input type="text" id="nomeFilho" placeholder="Nome" required><br><br>
+    <input type="email" id="emailFilho" placeholder="Email" required><br><br>
+    <input type="password" id="senhaFilho" placeholder="Senha" required><br><br>
+    <button type="submit">Cadastrar Filho</button>
+</form>
+
+<hr>
+
+<h2>Criar Tarefa</h2>
+<form id="tarefaForm">
+    <input type="text" id="titulo" placeholder="Título" required><br><br>
+    <input type="text" id="descricao" placeholder="Descrição" required><br><br>
+
+    <select id="filhoSelect" required>
+        <option value="">Selecione o filho</option>
+    </select><br><br>
+
+    <button type="submit">Criar Tarefa</button>
+</form>
+
+<hr>
+
+<h2>Minhas Tarefas</h2>
+<ul id="listaTarefas"></ul>
+
+<script>
+
+const maeId = Number(localStorage.getItem('maeId'));
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    if (!maeId) {
+        alert("Você precisa estar logada.");
+        window.location.href = "loginMae.html";
+        return;
+    }
+
+    carregarFilhos();
+    carregarTarefas();
+
+    document.getElementById('formFilho').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const res = await fetch('/api/filhos', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                nome: document.getElementById('nomeFilho').value,
+                email: document.getElementById('emailFilho').value,
+                senha: document.getElementById('senhaFilho').value,
+                maeId: maeId
+            })
+        });
+
+        if (!res.ok) {
+            alert("Erro ao cadastrar filho");
+            return;
+        }
+
+        alert("Filho cadastrado com sucesso!");
+        carregarFilhos();
+    });
+
+    document.getElementById('tarefaForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const res = await fetch('/api/tarefas', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                titulo: document.getElementById('titulo').value,
+                descricao: document.getElementById('descricao').value,
+                maeId: maeId,
+                filhoId: document.getElementById('filhoSelect').value
+            })
+        });
+
+        if (!res.ok) {
+            alert("Erro ao criar tarefa");
+            return;
+        }
+
+        alert("Tarefa criada!");
+        carregarTarefas();
+    });
+
+});
+
+async function carregarFilhos() {
+    const res = await fetch(`/api/filhos/mae/${maeId}`);
+    const filhos = await res.json();
+
+    const select = document.getElementById('filhoSelect');
+    select.innerHTML = '<option value="">Selecione o filho</option>';
+
+    filhos.forEach(filho => {
+        const option = document.createElement('option');
+        option.value = filho.id;
+        option.textContent = filho.nome;
+        select.appendChild(option);
+    });
+}
+
+async function carregarTarefas() {
+    const res = await fetch(`/api/tarefas/mae/${maeId}`);
+
+    if (!res.ok) {
+        alert("Erro ao carregar tarefas");
+        return;
+    }
+
+    const tarefas = await res.json();
+
+    const lista = document.getElementById('listaTarefas');
+    lista.innerHTML = '';
+
+tarefas.forEach(tarefa => {
+    const li = document.createElement('li');
+
+    let status = tarefa.concluida ? "Concluída" : "Pendente";
+
+    li.textContent = 
+        tarefa.titulo + " - " +
+        tarefa.descricao + " - " +
+        tarefa.nome_filho + " - " +
+        status;
+
+    lista.appendChild(li);
+});
+}
+
+function logout() {
+    localStorage.clear();
+    window.location.href = "index.html";
+}
+
+</script>
+
+</body>
+</html>

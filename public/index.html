@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sistema de Tarefas</title>
+</head>
+<body>
+    <h1>Sistema de Tarefas Domésticas</h1>
+
+    <h2>Criar Conta da Mãe</h2>
+    <form id="formMae">
+        <input type="text" id="nomeMae" placeholder="Nome" required><br><br>
+        <input type="email" id="emailMae" placeholder="Email" required><br><br>
+        <input type="password" id="senhaMae" placeholder="Senha" required><br><br>
+        <button type="submit">Cadastrar</button>
+    </form>
+
+    <br><br>
+
+    <a href="loginMae.html">Login da Mãe</a><br>
+    <a href="login.html">Login do Filho</a>
+
+    <script>
+        document.getElementById('formMae').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const res = await fetch('/api/maes', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    nome: document.getElementById('nomeMae').value,
+                    email: document.getElementById('emailMae').value,
+                    senha: document.getElementById('senhaMae').value
+                })
+            });
+
+            if (!res.ok) {
+                alert("Erro ao cadastrar mãe");
+                return;
+            }
+
+            const data = await res.json();
+
+            alert('Conta criada com sucesso!');
+            window.location.href = "loginMae.html";
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Mãe</title>
+</head>
+<body>
+    <h1>Login da Mãe</h1>
+
+    <form id="loginForm">
+        <input type="email" id="email" placeholder="Email" required><br><br>
+        <input type="password" id="senha" placeholder="Senha" required><br><br>
+        <button type="submit">Entrar</button>
+    </form>
+
+        <a href="index.html">Não tem uma conta? Faça o cadastro</a><br>
+        <a href="login.html">Você é um filho? Clique aqui</a>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const res = await fetch('/api/maes/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: document.getElementById('email').value,
+                    senha: document.getElementById('senha').value
+                })
+            });
+
+            if (!res.ok) {
+                alert('Login inválido');
+                return;
+            }
+
+            const mae = await res.json();
+
+            localStorage.setItem('maeId', Number(mae.id));
+
+            window.location.href = 'dashboardMae.html';
+        });
+    </script>
+</body>
+</html>

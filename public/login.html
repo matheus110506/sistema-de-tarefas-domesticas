@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Filho</title>
+</head>
+<body>
+    <h1>Login do Filho</h1>
+
+    <form id="loginForm">
+        <input type="email" id="email" placeholder="Email" required><br><br>
+        <input type="password" id="senha" placeholder="Senha" required><br><br>
+        <button type="submit">Entrar</button>
+    </form>
+
+        <a href="index.html">Você é uma mãe e ainda não tem uma conta? Faça o cadastro</a><br>
+        <a href="loginMae.html">Você é uma mãe e já tem uma conta? Clique aqui para fazer login</a>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const res = await fetch('/api/filhos/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: document.getElementById('email').value,
+                    senha: document.getElementById('senha').value
+                })
+            });
+
+            if (!res.ok) {
+                alert('Login inválido');
+                return;
+            }
+
+            const filho = await res.json();
+
+            localStorage.setItem('filhoId', Number(filho.id));
+            localStorage.setItem('maeId', Number(filho.mae_id));
+
+            window.location.href = 'dashboardFilho.html';
+        });
+    </script>
+</body>
+</html>
