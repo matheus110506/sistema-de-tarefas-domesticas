@@ -86,14 +86,46 @@ exports.listarTarefasPorFilho = async (req, res) => {
     const { filhoId } = req.params;
 
     try {
-        const [tarefas] = await db.query(
-            'SELECT * FROM tarefas WHERE filho_id = ?',
-            [filhoId]
-        );
+        const [tarefas] = await db.query(`
+            SELECT 
+                t.id,
+                t.titulo,
+                t.descricao,
+                CASE 
+                    WHEN tc.tarefa_id IS NOT NULL THEN 1
+                    ELSE 0
+                END AS concluida
+            FROM tarefas t
+            LEFT JOIN tarefas_concluidas tc 
+                ON t.id = tc.tarefa_id
+            WHERE t.filho_id = ?
+        `, [filhoId]);
 
         res.json(tarefas);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Erro ao listar tarefas do filho' });
+    }
+};
+
+exports.excluirTarefa = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        await db.query(
+            'DELETE FROM tarefas_concluidas WHERE tarefa_id = ?',
+            [id]
+        );
+
+        await db.query(
+            'DELETE FROM tarefas WHERE id = ?',
+            [id]
+        );
+
+        res.json({ message: 'Tarefa excluída com sucesso' });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Erro ao excluir tarefa' });
     }
 };
