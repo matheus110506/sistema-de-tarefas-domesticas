@@ -34,14 +34,38 @@
                 const lista = document.getElementById('listaTarefas');
                 lista.innerHTML = '';
 
-                tarefas.forEach(tarefa => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `
-                        <strong>${tarefa.titulo}</strong> - ${tarefa.descricao}
-                        <button onclick="concluir(${tarefa.id})">Concluir</button>
-                    `;
-                    lista.appendChild(li);
-                });
+tarefas.forEach(tarefa => {
+    const li = document.createElement('li');
+
+    li.textContent = tarefa.titulo + " - " + tarefa.descricao + " ";
+
+    if (tarefa.concluida) {
+        const span = document.createElement('span');
+        span.textContent = "Concluída";
+        span.style.color = "green";
+        li.appendChild(span);
+    } else {
+        const btn = document.createElement('button');
+        btn.textContent = "Concluir";
+
+        btn.addEventListener('click', async () => {
+            await fetch('/api/tarefas/concluir', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    tarefaId: tarefa.id,
+                    filhoId: filhoId
+                })
+            });
+
+            carregarTarefas(); // 🔥 recarrega lista
+        });
+
+        li.appendChild(btn);
+    }
+
+    lista.appendChild(li);
+});
             }
 
             window.concluir = async function(tarefaId) {
