@@ -1,0 +1,32 @@
+<h1>Login Admin</h1>
+    <link rel="stylesheet" href="style.css">
+
+<form id="loginForm">
+<input type="email" id="email" placeholder="Email"><br>
+<input type="password" id="senha" placeholder="Senha"><br>
+<button>Entrar</button>
+</form>
+
+<script>
+document.getElementById("loginForm").addEventListener("submit", async (e)=>{
+    e.preventDefault();
+
+    const res = await fetch("/api/admin/login",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({
+            email: document.getElementById("email").value,
+            senha: document.getElementById("senha").value
+        })
+    });
+
+    if(!res.ok){
+        alert("Login inválido");
+        return;
+    }
+
+    localStorage.setItem("admin","true");
+
+    window.location.href="dashboardAdmin.html";
+});
+</script>

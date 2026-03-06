@@ -1,0 +1,58 @@
+<h1>Painel Admin</h1>
+    <link rel="stylesheet" href="style.css">
+
+<button onclick="logout()">Sair</button>
+
+<h2>Banir IP</h2>
+
+<input type="text" id="ip" placeholder="IP">
+<button onclick="banir()">Banir</button>
+
+<h2>Logs</h2>
+
+<ul id="logs"></ul>
+
+<script>
+
+async function carregarLogs(){
+
+    const res = await fetch("/api/admin/logs");
+
+    const logs = await res.json();
+
+    const lista = document.getElementById("logs");
+
+    lista.innerHTML="";
+
+    logs.forEach(log=>{
+        const li = document.createElement("li");
+
+        li.textContent = log.acao + " - " + log.ip + " - " + log.data;
+
+        lista.appendChild(li);
+    });
+
+}
+
+async function banir(){
+
+    const ip = document.getElementById("ip").value;
+
+    await fetch("/api/admin/banir-ip",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ip})
+    });
+
+    alert("IP banido");
+
+}
+
+function logout(){
+    localStorage.clear();
+    window.location.href="index.html";
+}
+
+carregarLogs();
+
+</script>
