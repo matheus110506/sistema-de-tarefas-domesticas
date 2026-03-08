@@ -60,3 +60,37 @@ exports.banirIP = async (req, res) => {
     }
 
 };
+
+exports.banirMae = async (req, res) => {
+    const { id } = req.body;
+
+    try {
+
+        await db.query(
+            "UPDATE maes SET banido = true WHERE id = ?",
+            [id]
+        );
+
+        await db.query(
+            "UPDATE filhos SET banido = true WHERE mae_id = ?",
+            [id]
+        );
+
+        res.json({ mensagem: "Mãe e filhos banidos com sucesso" });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Erro ao banir mãe" });
+    }
+};
+
+exports.banirFilho = async (req, res) => {
+    const { id } = req.body;
+
+    await db.query(
+        "UPDATE filhos SET banido = true WHERE id = ?",
+        [id]
+    );
+
+    res.json({ mensagem: "Filho banido com sucesso" });
+};
