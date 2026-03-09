@@ -5,18 +5,19 @@ const port = 3000;
 app.use(express.json());
 app.use(express.static('public'));
 
-// Rotas
+const verificarBan = require('./middlewares/verificarBan');
+
+app.use(verificarBan);
+
 const maeRoutes = require('./routes/maeRoutes');
 const filhoRoutes = require('./routes/filhoRoutes');
 const tarefaRoutes = require('./routes/tarefaRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-const verificarBan = require('./middlewares/verificarBan');
 
 app.use('/api', maeRoutes);
 app.use('/api', filhoRoutes);
 app.use('/api', tarefaRoutes);
 app.use('/api/admin', adminRoutes);
-app.use(verificarBan);
 
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
