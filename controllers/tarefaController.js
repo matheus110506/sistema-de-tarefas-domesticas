@@ -3,11 +3,6 @@ const db = require('../db');
 exports.criarTarefa = async (req, res) => {
     const { titulo, descricao, maeId, filhoId } = req.body;
 
-    await db.query(
-        "INSERT INTO logs (acao, ip) VALUES (?,?)",
-        ["mãe criou tarefa", req.ip]
-    );
-
     try {
         const [mae] = await db.query('SELECT * FROM maes WHERE id = ?', [maeId]);
         if (mae.length === 0) return res.status(404).json({ error: 'Mãe não encontrada' });
@@ -24,6 +19,11 @@ exports.criarTarefa = async (req, res) => {
         const [result] = await db.query(
             'INSERT INTO tarefas (titulo, descricao, mae_id, filho_id) VALUES (?, ?, ?, ?)',
             [titulo, descricao, maeId, filhoId]
+        );
+
+        await db.query(
+            "INSERT INTO logs (acao, ip) VALUES (?,?)",
+            ["mãe criou tarefa", req.ip]
         );
 
         res.json({ id: result.insertId, titulo, descricao, maeId });
@@ -64,11 +64,6 @@ exports.listarTarefasPorMae = async (req, res) => {
 exports.marcarConcluida = async (req, res) => {
     const { tarefaId, filhoId } = req.body;
 
-    await db.query(
-        "INSERT INTO logs (acao, ip) VALUES (?,?)",
-        ["filho concluiu tarefa", req.ip]
-    );
-
     try {
         const [tarefas] = await db.query(
             'SELECT * FROM tarefas WHERE id = ? AND filho_id = ?',
@@ -82,6 +77,11 @@ exports.marcarConcluida = async (req, res) => {
         await db.query(
             'INSERT IGNORE INTO tarefas_concluidas (filho_id, tarefa_id) VALUES (?, ?)',
             [filhoId, tarefaId]
+        );
+
+        await db.query(
+            "INSERT INTO logs (acao, ip) VALUES (?,?)",
+            ["filho concluiu tarefa", req.ip]
         );
 
         res.json({ message: 'Tarefa marcada como concluída' });
@@ -130,6 +130,11 @@ exports.excluirTarefa = async (req, res) => {
         await db.query(
             'DELETE FROM tarefas WHERE id = ?',
             [id]
+        );
+
+        await db.query(
+            "INSERT INTO logs (acao, ip) VALUES (?,?)",
+            ["tarefa excluída", req.ip]
         );
 
         res.json({ message: 'Tarefa excluída com sucesso' });
