@@ -53,6 +53,11 @@ exports.banirIP = async (req, res) => {
             [ip]
         );
 
+        await db.query(
+            "INSERT INTO logs (acao, ip) VALUES (?,?)",
+            [`admin baniu IP ${ip}`, req.ip]
+        );
+
         res.json({ message: "IP banido" });
 
     } catch (erro) {
@@ -90,17 +95,27 @@ exports.banirMae = async (req, res) => {
 };
 
 exports.banirFilho = async (req, res) => {
+
     const { id } = req.body;
 
-    await db.query(
-        "UPDATE filhos SET banido = true WHERE id = ?",
-        [id]
-    );
+    try {
 
-    await db.query(
-        "INSERT INTO logs (acao, ip) VALUES (?,?)",
-        ["admin baniu filho", req.ip]
-    );
+        await db.query(
+            "UPDATE filhos SET banido = true WHERE id = ?",
+            [id]
+        );
 
-    res.json({ mensagem: "Filho banido com sucesso" });
+        await db.query(
+            "INSERT INTO logs (acao, ip) VALUES (?,?)",
+            ["admin baniu filho", req.ip]
+        );
+
+        res.json({ mensagem: "Filho banido com sucesso" });
+
+    } catch (error) {
+
+        console.error(error);
+        res.status(500).json({ error: "Erro ao banir filho" });
+
+    }
 };
