@@ -76,6 +76,11 @@ exports.banirMae = async (req, res) => {
             [id]
         );
 
+        await db.query(
+            "INSERT INTO logs (acao, ip) VALUES (?,?)",
+            ["admin baniu mãe", req.ip]
+        );
+
         res.json({ mensagem: "Mãe e filhos banidos com sucesso" });
 
     } catch (error) {
@@ -90,6 +95,11 @@ exports.banirFilho = async (req, res) => {
     await db.query(
         "UPDATE filhos SET banido = true WHERE id = ?",
         [id]
+    );
+
+    await db.query(
+        "INSERT INTO logs (acao, ip) VALUES (?,?)",
+        ["admin baniu filho", req.ip]
     );
 
     res.json({ mensagem: "Filho banido com sucesso" });
