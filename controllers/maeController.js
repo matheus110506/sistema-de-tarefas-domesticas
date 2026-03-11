@@ -43,10 +43,10 @@ exports.loginMae = async (req, res) => {
             return res.status(401).json({ error: 'Credenciais inválidas' });
 
         // LOG
-        await db.query(
-            "INSERT INTO logs (acao, ip) VALUES (?, ?)",
-            ["login da mãe", req.ip]
-        );
+    await db.query(
+        "INSERT INTO logs (acao, ip) VALUES (?,?)",
+        [`login da mãe ${mae.nome} (id ${mae.id})`, req.ip]
+    );
 
         res.json({
             id: mae.id,
