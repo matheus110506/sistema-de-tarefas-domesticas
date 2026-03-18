@@ -74,3 +74,47 @@ exports.encontrarMaePorId = async (id) => {
     const [rows] = await db.query('SELECT * FROM maes WHERE id = ?', [id]);
     return rows[0];
 };
+
+exports.banirMae = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        await db.query(
+            'UPDATE maes SET banido = 1 WHERE id = ?',
+            [id]
+        );
+
+        await db.query(
+            "INSERT INTO logs (acao, ip) VALUES (?,?)",
+            [`admin baniu mãe (id ${id})`, req.ip]
+        );
+
+        res.json({ message: 'Mãe banida com sucesso' });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Erro ao banir mãe' });
+    }
+};
+
+exports.desbanirMae = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        await db.query(
+            'UPDATE maes SET banido = 0 WHERE id = ?',
+            [id]
+        );
+
+        await db.query(
+            "INSERT INTO logs (acao, ip) VALUES (?,?)",
+            [`admin desbaniu mãe (id ${id})`, req.ip]
+        );
+
+        res.json({ message: 'Mãe desbanida com sucesso' });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Erro ao desbanir mãe' });
+    }
+};
