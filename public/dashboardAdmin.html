@@ -3,10 +3,13 @@
 
 <button onclick="logout()">Sair</button>
 
-<h2>Banir IP</h2>
+<h2>Mães</h2>
 
-<input type="text" id="ip" placeholder="IP">
-<button onclick="banir()">Banir</button>
+<ul id="listaMaes"></ul>
+
+<h2>Filhos</h2>
+
+<ul id="listaFilhos"></ul>
 
 <h2>Logs</h2>
 
@@ -53,6 +56,72 @@ function logout(){
     window.location.href="index.html";
 }
 
+async function carregarMaes() {
+    const res = await fetch('/api/maes');
+    const maes = await res.json();
+
+    const lista = document.getElementById('listaMaes');
+    lista.innerHTML = '';
+
+    maes.forEach(mae => {
+        const li = document.createElement('li');
+
+        li.innerHTML = `
+            ${mae.nome} (id ${mae.id}) ${mae.banido ? '<span class="banido">🚫 BANIDA</span>' : ''}
+            <button onclick="banirMae(${mae.id})">Banir</button>
+            <button onclick="desbanirMae(${mae.id})">Desbanir</button>
+        `;
+
+        lista.appendChild(li);
+    });
+}
+
+async function carregarFilhos() {
+    const res = await fetch('/api/filhos');
+    const filhos = await res.json();
+
+    const lista = document.getElementById('listaFilhos');
+    lista.innerHTML = '';
+
+    filhos.forEach(filho => {
+        const li = document.createElement('li');
+
+        li.innerHTML = `
+            ${filho.nome} (id ${filho.id}) ${filho.banido ? '<span class="banido">🚫 BANIDO</span>' : ''}
+            <button onclick="banirFilho(${filho.id})">Banir</button>
+            <button onclick="desbanirFilho(${filho.id})">Desbanir</button>
+        `;
+
+        lista.appendChild(li);
+    });
+}
+
+async function banirMae(id) {
+    await fetch(`/api/maes/${id}/banir`, { method: 'PUT' });
+    carregarMaes();
+    carregarLogs();
+}
+
+async function desbanirMae(id) {
+    await fetch(`/api/maes/${id}/desbanir`, { method: 'PUT' });
+    carregarMaes();
+    carregarLogs();
+}
+
+async function banirFilho(id) {
+    await fetch(`/api/filhos/${id}/banir`, { method: 'PUT' });
+    carregarFilhos();
+    carregarLogs();
+}
+
+async function desbanirFilho(id) {
+    await fetch(`/api/filhos/${id}/desbanir`, { method: 'PUT' });
+    carregarFilhos();
+    carregarLogs();
+}
+
 carregarLogs();
+carregarMaes();
+carregarFilhos();
 
 </script>
