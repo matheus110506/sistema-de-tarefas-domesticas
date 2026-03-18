@@ -72,3 +72,52 @@ exports.listarFilhosPorMae = async (req, res) => {
         res.status(500).json({ error: 'Erro ao listar filhos' });
     }
 };
+
+exports.banirFilho = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        await db.query(
+            'UPDATE filhos SET banido = 1 WHERE id = ?',
+            [id]
+        );
+
+        await db.query(
+            "INSERT INTO logs (acao, ip) VALUES (?,?)",
+            [`admin baniu filho (id ${id})`, req.ip]
+        );
+
+        res.json({ message: 'Filho banido com sucesso' });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Erro ao banir filho' });
+    }
+};
+
+exports.desbanirFilho = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        await db.query(
+            'UPDATE filhos SET banido = 0 WHERE id = ?',
+            [id]
+        );
+
+        await db.query(
+            "INSERT INTO logs (acao, ip) VALUES (?,?)",
+            [`admin desbaniu filho (id ${id})`, req.ip]
+        );
+
+        res.json({ message: 'Filho desbanido com sucesso' });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Erro ao desbanir filho' });
+    }
+};
+
+exports.listarTodosFilhos = async (req, res) => {
+    const [filhos] = await db.query('SELECT * FROM filhos');
+    res.json(filhos);
+};
