@@ -1,4 +1,4 @@
-/* Reset básico */
+/* Reset */
 * {
     margin: 0;
     padding: 0;
@@ -6,90 +6,131 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f6f8;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #eef2f7, #dfe9f3);
     padding: 20px;
-    color: #333;
+    color: #2c3e50;
+}
+
+/* Container central */
+.container {
+    max-width: 900px;
+    margin: auto;
 }
 
 /* Título */
 h1 {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    font-size: 28px;
 }
 
-/* Seções */
+/* Subtítulos */
 h2 {
     margin-top: 30px;
     margin-bottom: 10px;
-    border-left: 5px solid #4CAF50;
-    padding-left: 10px;
+    font-size: 20px;
+    color: #34495e;
 }
 
-/* Botões */
+/* Cards */
+ul {
+    list-style: none;
+}
+
+li {
+    background: white;
+    margin-bottom: 10px;
+    padding: 12px 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    transition: 0.2s;
+}
+
+li:hover {
+    transform: translateY(-2px);
+}
+
+/* Inputs */
+input, select {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+/* Botões padrão */
 button {
-    margin-left: 8px;
-    padding: 5px 10px;
+    padding: 7px 12px;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
-    background-color: #4CAF50;
+    background: #4CAF50;
     color: white;
+    font-weight: bold;
     transition: 0.2s;
 }
 
 button:hover {
-    background-color: #45a049;
+    background: #43a047;
+}
+
+/* Botão excluir */
+button[onclick*="excluir"] {
+    background: #e74c3c;
+}
+
+button[onclick*="excluir"]:hover {
+    background: #c0392b;
 }
 
 /* Botão sair */
 button[onclick="logout()"] {
-    background-color: #f44336;
     float: right;
+    background: #e74c3c;
 }
 
 button[onclick="logout()"]:hover {
-    background-color: #d32f2f;
+    background: #c0392b;
 }
 
-/* Lista */
-ul {
-    list-style: none;
-    margin-top: 10px;
+/* Botões de ação em linha */
+li button {
+    margin-left: 8px;
 }
 
-/* Itens da lista */
-li {
-    background: white;
-    margin-bottom: 8px;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+/* Status concluída */
+.concluida {
+    color: #2ecc71;
+    font-weight: bold;
 }
 
 /* Status banido */
 .banido {
-    color: red;
+    color: #e74c3c;
     font-weight: bold;
-    margin-left: 10px;
+    margin-left: 8px;
 }
 
 /* Logs */
 #logs li {
-    font-size: 14px;
+    font-size: 13px;
     color: #555;
 }
 
-/* Input */
-input {
-    padding: 8px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    margin-right: 5px;
+/* Formulários */
+form {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
 }
 
-/* Container geral (opcional) */
-.container {
-    max-width: 800px;
-    margin: auto;
+/* Divisor */
+hr {
+    margin: 20px 0;
+    border: none;
+    border-top: 1px solid #ccc;
 }
