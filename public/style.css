@@ -134,3 +134,25 @@ hr {
     border: none;
     border-top: 1px solid #ccc;
 }
+
+.botao-link {
+    display: inline-block;
+    padding: 12px 18px;
+    margin: 5px;
+    background: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.botao-link:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+}
+
+.links {
+    text-align: center;
+    margin-top: 30px;
+}
