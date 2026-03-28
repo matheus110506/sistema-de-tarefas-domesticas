@@ -15,3 +15,4 @@ Funcionalidades:
 - Login
 - Criação de tarefas
 - Listagem de tarefas
+- Banimento de usuários
