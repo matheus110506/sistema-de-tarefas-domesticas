@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 08/03/2026 às 23:29
+-- Tempo de geração: 28/03/2026 às 03:20
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -36,17 +36,6 @@ CREATE TABLE `filhos` (
   `banido` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `filhos`
---
-
-INSERT INTO `filhos` (`id`, `nome`, `email`, `senha`, `mae_id`, `banido`) VALUES
-(1, 'Matheus Almeida de Lima', 'matheus110506@hotmail.com', '$2b$10$UaIRzrLbnKI667clM/3V.O4XvUAHs4mgNht7XNeEacUcC5FMjGy1C', 1, 0),
-(2, 'Geronimo', 'ge@gmail.com', '$2b$10$UYYJiION2tHHd6PwNM8PC.bg2wYkE0H9c2htMzHWGWeLw1jQsomz.', 1, 0),
-(3, 'Joao', 'joao@gmail.com', '$2b$10$LJNhuPjmdmYJQko5BRwF3.p/xlraBRbWajvJMxayPqO53yypBv0Pm', 1, 0),
-(4, 'Jac', 'jac@gmail.com', '$2b$10$ypx34tE7F8DdIw6amdxIGuiy5zlEOsK3mEriSWfNb50QlhY5Iez6i', 1, 0),
-(5, 'Aníbal', 'an@gmail.com', '$2b$10$oKL9trt.tYd15UU/nDWQqOeScrdYQ39ma0BfQOBkK1U4B8HY116CG', 3, 0);
-
 -- --------------------------------------------------------
 
 --
@@ -57,13 +46,6 @@ CREATE TABLE `ips_banidos` (
   `id` int(11) NOT NULL,
   `ip` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `ips_banidos`
---
-
-INSERT INTO `ips_banidos` (`id`, `ip`) VALUES
-(1, '3');
 
 -- --------------------------------------------------------
 
@@ -77,13 +59,6 @@ CREATE TABLE `logs` (
   `ip` varchar(45) NOT NULL,
   `data` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `logs`
---
-
-INSERT INTO `logs` (`id`, `acao`, `ip`, `data`) VALUES
-(1, 'login da mãe', '::ffff:127.0.0.1', '2026-03-08 02:08:39');
 
 -- --------------------------------------------------------
 
@@ -99,14 +74,6 @@ CREATE TABLE `maes` (
   `banido` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `maes`
---
-
-INSERT INTO `maes` (`id`, `nome`, `email`, `senha`, `banido`) VALUES
-(1, 'Simone Aparecida de Almeida Lima', 'si@gmail.com', '$2b$10$6WkwDvcH.ArYUxmLE.3b4.wJaz0OQKuEkRVj2H1ogOk8cZUQ6btGS', 0),
-(3, 'Simaria', 'sia@gmail.com', '$2b$10$c65.78Sokhm1GUPvGgTTFezB2/hlOKxJyY.0zy8HTabQ9SmTB9dci', 0);
-
 -- --------------------------------------------------------
 
 --
@@ -121,14 +88,6 @@ CREATE TABLE `tarefas` (
   `filho_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `tarefas`
---
-
-INSERT INTO `tarefas` (`id`, `titulo`, `descricao`, `mae_id`, `filho_id`) VALUES
-(14, 'lavar a louça', 'a', 1, 1),
-(16, 'Fazer a tarefa', 'Geografia', 3, 5);
-
 -- --------------------------------------------------------
 
 --
@@ -139,14 +98,6 @@ CREATE TABLE `tarefas_concluidas` (
   `filho_id` int(11) NOT NULL,
   `tarefa_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `tarefas_concluidas`
---
-
-INSERT INTO `tarefas_concluidas` (`filho_id`, `tarefa_id`) VALUES
-(1, 14),
-(5, 16);
 
 --
 -- Índices para tabelas despejadas
@@ -202,31 +153,31 @@ ALTER TABLE `tarefas_concluidas`
 -- AUTO_INCREMENT de tabela `filhos`
 --
 ALTER TABLE `filhos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `ips_banidos`
 --
 ALTER TABLE `ips_banidos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `maes`
 --
 ALTER TABLE `maes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `tarefas`
 --
 ALTER TABLE `tarefas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Restrições para tabelas despejadas
